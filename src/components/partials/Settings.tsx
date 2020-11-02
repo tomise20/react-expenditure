@@ -79,7 +79,6 @@ const Settings = () => {
 
 	const onSaveSettingsData = (e: FormEvent) => {
 		e.preventDefault();
-		console.log('it works!');
 		axios.post('http://127.0.0.1:8000/api/set-settings', settings)
 		.then((res) => {
 			setSettings({...settings, isAlert: true});

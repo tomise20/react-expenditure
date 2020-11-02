@@ -16,15 +16,16 @@ const columns: ColDef[] = [
     valueGetter: (params: ValueGetterParams) =>
       `${params.getValue('amount')} Ft`,
   },
+  { field: 'date', headerName: 'Date', headerAlign:"center", width: 200, align:"center" },
 ];
 
 const rows = [
-  { id: 1, type: 'kiadas', subType: 'Rezsi', amount: 22500 },
-  { id: 2, type: 'kiadas', subType: 'Étel/Nasi', amount: 5650 },
-  { id: 3, type: 'kiadas', subType: 'Egyéb', amount: 2500 },
-  { id: 4, type: 'bevetel', subType: 'Étel/Nasi', amount: 3840 },
-  { id: 5, type: 'kiadas', subType: 'Telefonszámla', amount: 800 },
-  { id: 6, type: 'bevetel', subType: 'Egyéb', amount: 23000 },
+  { id: 1, type: 'kiadas', subType: 'Rezsi', amount: 22500, date: '2020.10.05' },
+  { id: 2, type: 'kiadas', subType: 'Étel/Nasi', amount: 5650, date: '2020.10.12' },
+  { id: 3, type: 'kiadas', subType: 'Egyéb', amount: 2500, date: '2020.10.14' },
+  { id: 4, type: 'bevetel', subType: 'Étel/Nasi', amount: 3840, date: '2020.10.18' },
+  { id: 5, type: 'kiadas', subType: 'Telefonszámla', amount: 800, date: '2020.10.19' },
+  { id: 6, type: 'bevetel', subType: 'Egyéb', amount: 23000, date: '2020.10.20' },
   { id: 7, type: 'kiadas', subType: 'Étel/Nasi', amount: 950 },
   { id: 8, type: 'kiadas', subType: 'Étel/Nasi', amount: 1350 },
   { id: 9, type: 'bevetel', subType: 'Egyéb', amount: 5000 },

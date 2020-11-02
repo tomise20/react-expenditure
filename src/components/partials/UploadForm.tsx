@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Typography, TextField, Button, Grid } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,13 +8,18 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import axios from 'axios'
 
 interface State {
     name: string;
     type: string;
     amount: string;
-    subType: string;
+    subtype: string;
     date: Date | null;
+}
+
+interface ErrorState {
+    error: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,11 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const types = [
     {
-      value: '0',
+      value: 'add',
       label: 'Kiadás',
     },
     {
-        value: '1',
+        value: 'subtraction',
         label: 'Bevétel',
     }
 ];
@@ -75,13 +80,15 @@ const UploadForm = () =>  {
         return today = new Date(`${mm}/${dd}/${yyyy}`);
     }
     
-    const [values, setValues] = React.useState<State>({
+    const [values, setValues] = useState<State>({
         name: '',
         type: '',
         amount: '',
-        subType: '',
+        subtype: '',
         date: getToday()
     });
+
+    const [error, setError] = useState<ErrorState>();
 
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -90,22 +97,41 @@ const UploadForm = () =>  {
     const handleDateChange = (date: Date | null) => {
         setValues({ ...values, date: date });
     };
+
+    const onAddCost = () => {
+        axios.post('http://127.0.0.1:8000/api/add-cost', values)
+		.then((res) => {
+            console.log('Cost is successfully saved!');
+            setValues({
+                ...values,
+                name: '',
+                type: '',
+                amount: '',
+                subtype: '',
+                date: getToday()
+            })
+		})
+		.catch(error => {
+			setError(error.message);
+		})
+    }
     
 
     return (
         <div>
             <Typography variant="h5" className={classes.title} color="primary">Kiadás/Bevétel felvétele</Typography>
             <form noValidate autoComplete="off">
-                <TextField className={classes.textField} label="Megnevezése" variant="outlined" fullWidth={true} />
+                <TextField className={classes.textField} name="name" label="Megnevezése" variant="outlined" onChange={handleChange('name')} fullWidth={true} />
                 <TextField
                     fullWidth={true}
                     className={classes.textField}
                     id="standard-select-currency"
                     select
+                    name="type"
                     variant="outlined"
                     label="Típus"
-                    value={values.name}
-                    onChange={handleChange('name')}
+                    value={values.type}
+                    onChange={handleChange('type')}
                     >
                     {types.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -117,6 +143,8 @@ const UploadForm = () =>  {
                     fullWidth={true}
                     label="Összeg"
                     id="outlined-start-adornment"
+                    name="amount"
+                    onChange={handleChange('amount')}
                     className={classes.textField}
                     InputProps={{
                         endAdornment: <InputAdornment position="end">Ft</InputAdornment>,
@@ -130,8 +158,9 @@ const UploadForm = () =>  {
                     select
                     variant="outlined"
                     label="Pontos típus"
-                    value={values.subType}
-                    onChange={handleChange('subType')}
+                    name="subtype"
+                    value={values.subtype}
+                    onChange={handleChange('subtype')}
                     >
                     {subTypes.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -144,6 +173,7 @@ const UploadForm = () =>  {
                         <KeyboardDatePicker
                         fullWidth={true}
                         disableToolbar
+                        name="date"
                         variant="inline"
                         format="yyyy/MM/dd"
                         margin="normal"
@@ -157,7 +187,7 @@ const UploadForm = () =>  {
                         />
                     </Grid>
                 </MuiPickersUtilsProvider>
-                <Button className={classes.button} fullWidth={true} color="primary" >Mentés</Button>
+                <Button className={classes.button} fullWidth={true} color="primary" onClick={onAddCost}>Mentés</Button>
             </form>
         </div>
     );
