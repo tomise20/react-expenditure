@@ -5,7 +5,6 @@ import Statement from "../partials/Statement";
 import Settings from '../partials/Settings';
 import InfoTable from '../partials/InfoTable';
 
-
 export default class Home extends React.Component {
 
 	render() {

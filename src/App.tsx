@@ -2,17 +2,19 @@ import React from "react";
 import "./App.css";
 import Header from "./components/partials/site/Header";
 import Home from "./components/pages/Home";
-import { Provider } from 'react-redux'
-import store from './redux/store';
+import Alert from '@material-ui/lab/Alert';
 
 function App() {
 	return (
-		<Provider store={store}>
-			<div className="App">
-				<Header />
-				<Home />
+		<div className="App">
+			<div style={{marginBottom: "25px"}}>
+				{ false && 
+					<Alert>The settings is successfuly saved — check it out!</Alert>
+				}
 			</div>
-		</Provider>
+			<Header />
+			<Home />
+		</div>
 	);
 }
 
