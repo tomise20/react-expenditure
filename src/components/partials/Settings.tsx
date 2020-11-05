@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { TextField, Button, InputAdornment } from "@material-ui/core";
+import axios from "axios";
 
 interface Props {
 	starterAmount: number,
@@ -44,6 +45,21 @@ export const Settings = () => {
 		setValues({ ...values, [prop]: event.target.value });
 	};
 
+	useEffect(() => {
+		axios.get("http://127.0.0.1:8000/api/default-data")
+		.then(res => {
+			setValues({
+				...values,
+				starterAmount: res.data.settings.start_amount,
+				currentAmount: res.data.settings.current_amount,
+				monthlyTarget: res.data.settings.monthly_target
+			})
+		})
+		.catch(error => {
+			console.log(error);
+		})
+	}, [])
+
 	const onSaveSettings = () => {
 		
 	}
@@ -58,7 +74,6 @@ export const Settings = () => {
 					name="startAmount"
 					value={values.starterAmount}
 					onChange={handleChange("starterAmount")}
-					disabled={false}
 					label="Induló összeg"
 					id="outlined-start-adornment-1"
 					className={classes.textField}
@@ -69,7 +84,6 @@ export const Settings = () => {
 				/>
 				<TextField
 					value={values.currentAmount}
-					disabled={true}
 					label="Jelenlegi összeg"
 					id="outlined-start-adornment-2"
 					className={classes.textField}
@@ -80,7 +94,6 @@ export const Settings = () => {
 				/>
 				<TextField
 					value={values.monthlyTarget}
-					disabled={false}
 					onChange={handleChange("monthlyTarget")}
 					label="Havi cél"
 					id="outlined-start-adornment-3"
