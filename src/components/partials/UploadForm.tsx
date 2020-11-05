@@ -39,11 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const types = [
     {
-      value: 'add',
+      value: 'subtraction',
       label: 'Kiadás',
     },
     {
-        value: 'subtraction',
+        value: 'add',
         label: 'Bevétel',
     }
 ];
@@ -80,7 +80,7 @@ const UploadForm = () =>  {
         return today = new Date(`${mm}/${dd}/${yyyy}`);
     }
     
-    const [values, setValues] = useState<State>({
+    const [cost, setCost] = useState<State>({
         name: '',
         type: '',
         amount: '',
@@ -88,22 +88,20 @@ const UploadForm = () =>  {
         date: getToday()
     });
 
-    const [error, setError] = useState<ErrorState>();
-
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValues({ ...values, [prop]: event.target.value });
+        setCost({ ...cost, [prop]: event.target.value });
     };
 
     const handleDateChange = (date: Date | null) => {
-        setValues({ ...values, date: date });
+        setCost({ ...cost, date: date });
     };
 
     const onAddCost = () => {
-        axios.post('http://127.0.0.1:8000/api/add-cost', values)
+        axios.post('http://127.0.0.1:8000/api/add-cost', cost)
 		.then((res) => {
             console.log('Cost is successfully saved!');
-            setValues({
-                ...values,
+            setCost({
+                ...cost,
                 name: '',
                 type: '',
                 amount: '',
@@ -112,7 +110,7 @@ const UploadForm = () =>  {
             })
 		})
 		.catch(error => {
-			setError(error.message);
+			console.log(error.message);
 		})
     }
     
@@ -130,7 +128,7 @@ const UploadForm = () =>  {
                     name="type"
                     variant="outlined"
                     label="Típus"
-                    value={values.type}
+                    value={cost.type}
                     onChange={handleChange('type')}
                     >
                     {types.map((option) => (
@@ -159,7 +157,7 @@ const UploadForm = () =>  {
                     variant="outlined"
                     label="Pontos típus"
                     name="subtype"
-                    value={values.subtype}
+                    value={cost.subtype}
                     onChange={handleChange('subtype')}
                     >
                     {subTypes.map((option) => (
@@ -179,7 +177,7 @@ const UploadForm = () =>  {
                         margin="normal"
                         id="date-picker-inline"
                         label="Nap megadása"
-                        value={values.date}
+                        value={cost.date}
                         onChange={handleDateChange}
                         KeyboardButtonProps={{
                             'aria-label': 'change date',
