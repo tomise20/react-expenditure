@@ -7,7 +7,10 @@ import PieChartComp from "./charts/PieChartComp";
 import BarChartComp from "./charts/BarChartComp";
 // import PieChartComp from "./charts/PieChartComp";
 
-interface IProps {}
+interface IProps {
+	pieData: [];
+	barData: [];
+}
 
 interface IState {
 	chartType: string;
@@ -50,8 +53,12 @@ export default class Statement extends PureComponent<IProps, IState> {
 						<TrendingUpIcon style={iconStyle} />
 					</div>
 				</div>
-				<div style={{display: "flex", justifyContent: "center"}}>
-					{this.state.chartType === "bar" ? <BarChartComp /> : <PieChartComp />}
+				<div style={{ display: "flex", justifyContent: "center" }}>
+					{this.state.chartType === "bar" ? (
+						<BarChartComp data={this.props.barData} />
+					) : (
+						<PieChartComp data={this.props.pieData} />
+					)}
 				</div>
 			</div>
 		);
