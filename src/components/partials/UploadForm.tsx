@@ -17,6 +17,7 @@ interface State {
 
 interface FromProps {
 	isChanged(value: string): void;
+	isAlert(): void;
 }
 
 interface ErrorState {
@@ -105,6 +106,7 @@ const UploadForm: React.FunctionComponent<FromProps> = (props) => {
 			.then((res) => {
 				console.log("Cost is successfully saved!");
 				props.isChanged(cost.name);
+				props.isAlert();
 
 				setCost({
 					...cost,
@@ -129,6 +131,7 @@ const UploadForm: React.FunctionComponent<FromProps> = (props) => {
 				<TextField
 					className={classes.textField}
 					name="name"
+					value={cost.name}
 					label="Megnevezése"
 					variant="outlined"
 					onChange={handleChange("name")}
@@ -156,6 +159,7 @@ const UploadForm: React.FunctionComponent<FromProps> = (props) => {
 					label="Összeg"
 					id="outlined-start-adornment"
 					name="amount"
+					value={cost.amount}
 					onChange={handleChange("amount")}
 					className={classes.textField}
 					InputProps={{

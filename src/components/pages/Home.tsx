@@ -4,9 +4,11 @@ import UploadForm from "../partials/UploadForm";
 import Statement from "../partials/Statement";
 import Settings from "../partials/Settings";
 import InfoTable from "../partials/InfoTable";
+import { Alert } from "@material-ui/lab";
 import axios from "axios";
 
 interface IHomeState {
+	isAlert: boolean;
 	changeName: string;
 	pieChartData: [];
 	barChartData: [];
@@ -16,6 +18,7 @@ export default class Home extends React.Component<any, IHomeState> {
 	constructor(props: any) {
 		super(props);
 		this.state = {
+			isAlert: false,
 			changeName: "",
 			pieChartData: [],
 			barChartData: [],
@@ -49,10 +52,25 @@ export default class Home extends React.Component<any, IHomeState> {
 							</Typography>
 						</Grid>
 						<Grid item xs={12}>
+							<div style={{ marginBottom: "25px" }}>
+								{this.state.isAlert && (
+									<Alert
+										severity="success"
+										onClose={() => this.setState({ ...this.state, isAlert: false })}
+									>
+										The settings is successfuly saved — <strong>check it out!</strong>
+									</Alert>
+								)}
+							</div>
+						</Grid>
+						<Grid item xs={12}>
 							<Settings />
 						</Grid>
 						<Grid item lg={4}>
-							<UploadForm isChanged={(value: string) => this.setState({ changeName: value })} />
+							<UploadForm
+								isChanged={(value: string) => this.setState({ changeName: value })}
+								isAlert={() => this.setState({ ...this.state, isAlert: true })}
+							/>
 						</Grid>
 						<Grid item lg={8}>
 							<Statement pieData={this.state.pieChartData} barData={this.state.barChartData} />
