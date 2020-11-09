@@ -1,1 +1,3 @@
-# React expenditure with materail-ui
+# React expenditure with materail-ui and typescript
+
+Used technologies: React, typescript
